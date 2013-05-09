@@ -1,0 +1,5 @@
+camlich.egg-info*
+build*
+.project
+.pydevproject
+*.so
