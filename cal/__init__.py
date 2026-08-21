@@ -1,1 +1,1 @@
-import amlich
+from . import amlich
