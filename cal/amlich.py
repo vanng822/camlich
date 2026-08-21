@@ -96,7 +96,7 @@ def SunLongitude(jdn):
                         + 0.000290 * math.sin(dr * 3 * M)
     L = L0 + DL    ## true longitude, degree
     L = L * dr
-    L = L - math.pi * 2 * (int(L / (math.pi * 2)))
+    L = L - math.pi * 2 * math.floor(L / (math.pi * 2))
     #### Normalize to (0, 2*math.pi)
     return L
 
@@ -115,7 +115,7 @@ def getLunarMonth11(yy, timeZone):
     # off = jdFromDate(31, 12, yy) \
     #                        - 2415021.076998695
     off = jdFromDate(31, 12, yy) - 2415021.
-    k = int(off / 29.530588853)
+    k = int(math.floor(off / 29.530588853))
     nm = getNewMoonDay(k, timeZone)
     sunLong = getSunLongitude(nm, timeZone)
     #### sun longitude at local midnight
@@ -125,8 +125,8 @@ def getLunarMonth11(yy, timeZone):
 
 def getLeapMonthOffset(a11, timeZone):
     '''def getLeapMonthOffset(a11, timeZone): Find the index of the leap month after the month starting on the day a11.'''
-    k = int((a11 - 2415021.076998695) \
-                            / 29.530588853 + 0.5)
+    k = int(math.floor((a11 - 2415021.076998695) \
+                            / 29.530588853 + 0.5))
     last = 0
     i = 1    ## start with month following lunar month 11
     arc = getSunLongitude(\
@@ -144,8 +144,8 @@ def getLeapMonthOffset(a11, timeZone):
 def S2L(dd, mm, yy, timeZone=7):
     '''def S2L(dd, mm, yy, timeZone = 7): Convert solar date dd/mm/yyyy to the corresponding lunar date.'''
     dayNumber = jdFromDate(dd, mm, yy)
-    k = int((dayNumber - 2415021.076998695) \
-                                / 29.530588853)
+    k = int(math.floor((dayNumber - 2415021.076998695) \
+                                / 29.530588853))
     monthStart = getNewMoonDay(k + 1, timeZone)
     if (monthStart > dayNumber):
         monthStart = getNewMoonDay(k, timeZone)
@@ -184,8 +184,8 @@ def L2S(lunarD, lunarM, lunarY, lunarLeap, tZ=7):
     else:
         a11 = getLunarMonth11(lunarY, tZ)
         b11 = getLunarMonth11(lunarY + 1, tZ)
-    k = int(0.5 + \
-                            (a11 - 2415021.076998695) / 29.530588853)
+    k = int(math.floor(0.5 + \
+                            (a11 - 2415021.076998695) / 29.530588853))
     off = lunarM - 11
     if (off < 0):
         off += 12
